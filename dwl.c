@@ -2140,7 +2140,7 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
-	unsigned int i, n = 0, h, mw, my, ty;
+	unsigned int i, n = 0, h, mw, my, ty, ns;
 	Client *c;
 
 	wl_list_for_each(c, &clients, link)
@@ -2149,22 +2149,26 @@ tile(Monitor *m)
 	if (n == 0)
 		return;
 
-	if (n > m->nmaster)
+	if (n > m->nmaster) {
 		mw = m->nmaster ? m->w.width * m->mfact : 0;
-	else
+		ns = m->nmaster > 0 ? 2 : 1;
+	} else {
 		mw = m->w.width;
-	i = my = ty = 0;
+		ns = 1;
+	}
+	i = 0;
+	my = ty = gappx;
 	wl_list_for_each(c, &clients, link) {
 		if (!VISIBLEON(c, m) || c->isfloating || c->isfullscreen)
 			continue;
 		if (i < m->nmaster) {
-			h = (m->w.height - my) / (MIN(n, m->nmaster) - i);
-			resize(c, m->w.x, m->w.y + my, mw, h, 0);
-			my += c->geom.height;
+			h = (m->w.height - my) / (MIN(n, m->nmaster) - i) - gappx;
+			resize(c, m->w.x + gappx, m->w.y + my, mw - gappx*(5-ns)/2, h, 0);
+			my += c->geom.height + gappx;
 		} else {
-			h = (m->w.height - ty) / (n - i);
-			resize(c, m->w.x + mw, m->w.y + ty, m->w.width - mw, h, 0);
-			ty += c->geom.height;
+			h = (m->w.height - ty) / (n - i) - gappx;
+			resize(c, m->w.x + mw + gappx/ns, m->w.y + ty, m->w.width - mw - gappx*(5-ns)/2, h, 0);
+			ty += c->geom.height + gappx;
 		}
 		i++;
 	}
