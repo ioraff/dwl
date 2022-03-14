@@ -1631,21 +1631,14 @@ printstatus(void)
 				urg |= c->tags;
 		}
 		if ((c = focustop(m))) {
-			printf("%s title %s\n", m->wlr_output->name, client_get_title(c));
-			printf("%s fullscreen %u\n", m->wlr_output->name, c->isfullscreen);
-			printf("%s floating %u\n", m->wlr_output->name, c->isfloating);
 			sel = c->tags;
 		} else {
-			printf("%s title \n", m->wlr_output->name);
-			printf("%s fullscreen \n", m->wlr_output->name);
-			printf("%s floating \n", m->wlr_output->name);
 			sel = 0;
 		}
 
-		printf("%s selmon %u\n", m->wlr_output->name, m == selmon);
-		printf("%s tags %u %u %u %u\n", m->wlr_output->name, occ, m->tagset[m->seltags],
-				sel, urg);
-		printf("%s layout %s\n", m->wlr_output->name, m->lt[m->sellt]->symbol);
+		printf("%u %u %u %u %s\n",
+				occ, m->tagset[m->seltags], sel, urg,
+				m->lt[m->sellt]->symbol);
 	}
 	fflush(stdout);
 }
