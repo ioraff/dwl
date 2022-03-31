@@ -16,6 +16,8 @@ clean:
 
 install: dwl
 	install -Dm755 dwl $(DESTDIR)$(PREFIX)/bin/dwl
+	chown :input $(DESTDIR)$(PREFIX)/bin/dwl
+	chmod g+s    $(DESTDIR)$(PREFIX)/bin/dwl
 	install -Dm644 dwl.1 $(DESTDIR)$(MANDIR)/man1/dwl.1
 
 uninstall:
